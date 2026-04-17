@@ -41,3 +41,19 @@ def eliminar_user(id: int):
     cursor.execute("DELETE FROM users WHERE id = %s", (id,))
     conexion.commit()
     cursor.close()
+
+def editar_user(id: int, Nombre:str, Edad:int):
+    cursor = conexion.cursor()
+    cursor.execute("UPDATE users SET nombre = %s, edad = %s WHERE id = %s",(Nombre,Edad,id))
+    conexion.commit()
+    cursor.close()
+
+def mostrar_user_aveces(nombre: str = None):
+    cursor = conexion.cursor(dictionary=True)
+    if nombre:
+        cursor.execute("SELECT * FROM users WHERE Nombre = %s", (nombre,))
+    else:
+        cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    cursor.close()
+    return users
