@@ -2,7 +2,7 @@ import mysql.connector
 from fastapi import HTTPException
 from dotenv import load_dotenv
 import os
-
+from fastapi import HTTPException
 load_dotenv()
 
 conexion = mysql.connector.connect(
@@ -32,6 +32,11 @@ def get_all_users():
 
 def create_user(nombre: str, edad: int):
     cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM users WHERE Nombre = %s", (nombre,))
+    existe = cursor.fetchone()
+    if existe:
+        cursor.close()  # 👈 cerrar ANTES de lanzar el error
+        raise HTTPException(status_code=400, detail="User already exists")
     cursor.execute("INSERT INTO users (Nombre, Edad) VALUES (%s, %s)", (nombre, edad))
     conexion.commit()
     cursor.close()

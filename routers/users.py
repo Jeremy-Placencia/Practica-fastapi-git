@@ -8,6 +8,9 @@ class Persona(BaseModel):
     Nombre: str
     Edad: int
 
+@router.get("/us")
+def ver_users():
+    return user_service.get_all_users()
 
 @router.get("/")
 def send_users_maybe(nombre: str = None):
